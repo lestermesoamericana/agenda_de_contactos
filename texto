@@ -1,0 +1,100 @@
+def CrearTabla():
+    miConexion = sqlite3.connect("Usuarios")
+    miCursor = miConexion.cursor()
+
+    try:
+        miCursor.execute(
+            '''
+            CREATE TABLE DATOSUSUARIOS(
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NOMBRE_USUARIO VARCHAR(50),
+            APELLIDO VARCHAR(50),
+            PASSWORD VARCHAR(25),
+            DIRECCION VARCHAR(50)
+            COMENTARIOS VARCHAR(200)
+            )
+            '''
+        )
+        messagebox.showinfo("BBDD", "BBDD Creada con éxito")
+    except:
+        messagebox.showwarning("Atencion", "La BBDD ya ha sido creada")
+
+-------------------------------------------------------------------------------------
+miCursor.execute(
+            '''
+            CREATE TABLE DATOSUSUARIOS(
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NOMBRE_USUARIO VARCHAR(50),
+            APELLIDO VARCHAR(50),
+            PASSWORD VARCHAR(25),
+            DIRECCION VARCHAR(50)
+            COMENTARIOS VARCHAR(200))
+            ''')
+------------------------------------------------------------------------------------
+# un campo sea unico
+miCursor.execute(
+    '''
+    CREATE TABLE PRODUCTOS(
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        NOMBRE_ARTICULO VARCHAR(50) UNIQUE,
+        PRECIO INTEGER,
+        SECCION VARCHAR(20)
+    )
+    '''
+)
+
+# Creacion de la lista
+productos = [("Pelota", 20, "jugueteria"),
+             ("Pantalon", 15, "confeccion"),
+             ("Desatornillador", 25, "Ferreteria"),
+             ("Jarron", 45, "Ceramica"),
+             ]
+
+# Insertar
+miCursor.executemany("INSERT INTO PRODUCTOS VALUES(NULL, ?,?,?)", productos)
+
+---------------------------------------------------------------------------------------
+----------------------------------------------------- CONSULTAS SIN PARAMETRIZAR
+# CREATE
+    def crear(self, campo1, campo2, campo3, campo4, textoCom):
+        self.__miCursor.execute(
+            "INSERT INTO DATOSUSUARIOS VALUES(NULL, '" + campo1.get() +
+            "','" + campo2.get() +
+            "','" + campo3.get() +
+            "','" + campo4.get() +
+            "','" + textoCom.get("1.0",END) + "')"
+            )
+        self.__miConexion.commit()
+
+        messagebox.showinfo("BBDD", "Registro insertado con exito")
+
+# READ
+    def leer(self, campoID, campo1, campo2, campo3, campo4, textoCom):
+        if campoID.get() == "":
+            messagebox.showerror("Error", "Debe escribir un dato entero en ID")
+        else:
+            self.__miCursor.execute("SELECT * FROM DATOSUSUARIOS WHERE ID="+ campoID.get())
+            usuarios = self.__miCursor.fetchall()
+
+            for usuario in usuarios:
+                campoID.set(usuario[0])
+                campo1.set(usuario[1])
+                campo2.set(usuario[2])
+                campo3.set(usuario[3])
+                campo4.set(usuario[4])
+                textoCom.insert(1.0, usuario[5])
+        
+            self.__miConexion.commit()
+
+# UPDATE
+    def actualizar(self, campoID, campo1, campo2, campo3, campo4, textoCom):
+        self.__miCursor.execute(
+            "UPDATE DATOSUSUARIOS SET NOMBRE_USUARIO='" + campo1.get() +
+            "', APELLIDO='" + campo2.get() +
+            "', PASSWORD='" + campo3.get() +
+            "', DIRECCION='" + campo4.get() +
+            "', COMENTARIOS='" + textoCom.get("1.0",END) + 
+            "'WHERE ID=" + campoID.get())
+        self.__miConexion.commit()
+
+        messagebox.showinfo("BBDD", "Registro actualizado con exito")
