@@ -98,3 +98,6 @@ miCursor.executemany("INSERT INTO PRODUCTOS VALUES(NULL, ?,?,?)", productos)
         self.__miConexion.commit()
 
         messagebox.showinfo("BBDD", "Registro actualizado con exito")
+        -------------------------------------------
+
+MISSION COMPLETE!!!!!
